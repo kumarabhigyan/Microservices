@@ -1,0 +1,29 @@
+package com.olx.controller;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.olx.dto.Category;
+
+@RestController
+@RequestMapping("olx")
+public class MasterDataController {
+	@GetMapping(value="/advertise/category",produces = MediaType.APPLICATION_JSON_VALUE)
+	public List<Category> getAllCategory(){
+		List<Category> categories=new ArrayList<Category>();
+		categories.add(new Category(1, "Furniture"));
+		categories.add(new Category(2, "Real Estate"));
+		return categories;
+		
+		
+		
+		
+	}
+	
+
+}

@@ -1,0 +1,56 @@
+package com.zensar.controller;
+
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.zensar.dto.Stock;
+
+@RestController
+public class StockController {
+	private static Map<Integer,Stock> stockMap=new HashMap<Integer,Stock>();
+	private static int lastStockId=3;
+	
+	static {
+		stockMap.put(1, new Stock(1,"infosys","NSE",20000));
+		stockMap.put(2, new Stock(2,"HCL","NSE",89000));
+		stockMap.put(3, new Stock(3,"TCS","BSE",20000));
+		
+		
+		
+	}
+	@PostMapping(value="/stock",consume=MediaType.APPLICATION_JSON_VALUE,produces=MediaType.APPLICATION_JSON_VALUE)
+	public Stock createNewStock(Stock stock) {
+		lastStockId++;
+		stock.setId(lastStockId);
+		stockMap.put(lastStockId, stock);
+		return stock;
+		
+		
+		
+	}
+	@GetMapping(value="/stock/{id}",produces=MediaType.APPLICATION_JSON_VALUE)
+	public Stock getStockById(@PathVariable("id")int stockId) {
+		
+		return stockMap.get(stockId);
+		
+		
+		
+	}
+	@GetMapping(value="/stock",produces=MediaType.APPLICATION_JSON_VALUE)
+	public Collection<Stock> getAllStocks(){
+		
+		return stockMap.values();
+		
+		
+		
+		
+	}
+
+}

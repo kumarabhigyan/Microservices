@@ -1,0 +1,6 @@
+package com.zensar;
+
+@component
+public class MyCommandLineRunner implements CommandLineRunner {
+
+}

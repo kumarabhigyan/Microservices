@@ -1,0 +1,11 @@
+management:
+   endpoints:
+         web:
+           exposure:
+            include: "*"
+            base-path: /olx-monitor
+            
+            endpoint: 
+                shutdown:
+                   enabled:true
+                   

@@ -1,0 +1,93 @@
+package com.olx.controller;
+
+import java.security.PublicKey;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import com.olx.dto.Advertise;
+import com.olx.service.AdvertiseService;
+
+
+
+public class AdvertiseController {
+	private static Map<Integer,Advertise> advertiseMap=new HashMap<Integer,Advertise>();
+	private static int lastAdvertiseId;
+	@Autowired
+	AdvertiseService advertiseService;
+	
+	
+	
+	static {
+		advertiseMap.put(1, new Advertise(1, "Laptop Sale",54000,"intel core3 sony"));
+		advertiseMap.put(2, new Advertise(2, "Table Sale",12000,"Bajaj"));
+		advertiseMap.put(3, new Advertise(3, "Car Sale",22000,"Maruti"));
+		advertiseMap.put(4, new Advertise(4, "Chair Sale",4000,"Ambuja"));
+		
+	
+		
+		
+		
+	}
+	@GetMapping(value="/advertise/search/filtercriteria", produces = MediaType.APPLICATION_JSON_VALUE)
+	public List<Advertise> searchAdvertisesByFilterCriteria(@RequestParam("searchText")String searchText,
+			@RequestParam(name="category", required=false)int categoryId,@RequestParam("postedBy") String postedBy,
+			@RequestParam("dateCondition")String dateCondition,@RequestParam("onDate")@DateTimeFormat(iso=DateTimeFormat.ISO.DATE)LocalDate onDate){
+	return advertiseService.searchAdvertisesByFilterCriteria(searchText, categoryId, postedBy, dateCondition, onDate);
+}
+	
+	public boolean deleteAdvertiseById(@PathVariable("id")int advertiseId) {
+		
+		advertiseMap.remove(advertiseId);
+		return true;
+		
+		
+	}
+	
+	
+	
+
+	
+	@PostMapping(value="/advertise",consumes=MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
+	public Advertise createAdvertisement(@RequestBody Advertise advertise){
+		lastAdvertiseId++;
+		advertise.setId(lastAdvertiseId);
+		advertiseMap.put(lastAdvertiseId,advertise);
+		
+		
+		return advertise;
+		
+		
+		
+		
+		
+	}
+	
+	@GetMapping(value="/advertise/{id}",produces=MediaType.APPLICATION_JSON_VALUE)
+	public Advertise getAdvertiseById(@PathVariable("id")int advertiseId) {
+		
+		return advertiseMap.get(advertiseId);
+		
+		
+		
+	}
+	
+		
+		
+		
+		
+	
+
+}
